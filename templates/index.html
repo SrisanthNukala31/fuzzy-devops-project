@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DevOps Challenges Ranking</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    table {
+      margin: auto;
+      border-collapse: collapse;
+      width: 70%;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background: #3498db;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background: #ecf0f1;
+    }
+
+    .top {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Fuzzy TOPSIS Ranking of DevOps Challenges</h1>
+
+<table>
+  <tr>
+    <th>Rank</th>
+    <th>Challenge</th>
+    <th>Score</th>
+  </tr>
+
+  {% for i, item in enumerate(data) %}
+  <tr>
+    <td>{{ i+1 }}</td>
+    <td class="{% if i == 0 %}top{% endif %}">
+      {{ item[0] }}
+    </td>
+    <td>{{ "%.3f"|format(item[1]) }}</td>
+  </tr>
+  {% endfor %}
+
+</table>
+
+<h2>Score Visualization</h2>
+
+<canvas id="chart" width="600" height="300"></canvas>
+
+<script>
+const labels = {{ labels|safe }};
+const scores = {{ scores|safe }};
+
+new Chart(document.getElementById('chart'), {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Score',
+      data: scores
+    }]
+  }
+});
+</script>
+
+</body>
+</html>

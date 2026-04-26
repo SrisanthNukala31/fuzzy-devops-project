@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import numpy as np
 
 app = Flask(__name__)
@@ -105,7 +105,24 @@ def topsis(matrix, weights):
 # Step 8: Route
 # -----------------------------
 @app.route('/')
-def get_ranking():
+def show_ui():
+    scores = topsis(matrix, weights)
+
+    ranking = sorted(
+        zip(challenges, scores),
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    labels = [r[0] for r in ranking]
+    values = [float(r[1]) for r in ranking]
+
+    return render_template(
+        "index.html",
+        data=ranking,
+        labels=labels,
+        scores=values
+    )
     scores = topsis(matrix, weights)
     
     ranking = sorted(
